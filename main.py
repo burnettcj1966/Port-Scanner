@@ -5,6 +5,7 @@ from threading import Thread
 from queue import Queue
 import threading
 import time
+import IP_Scanner
 
 q = Queue()
 target = 0
@@ -13,9 +14,6 @@ def scan(port):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         socket.setdefaulttimeout(1)
-
-        if port % 5000 == 0:
-            print("BENCHMARK: " + str(port))
         result = s.connect_ex((target,port))
         if result == 0:
             print("PORT {} IS OPEN".format(port))
@@ -36,14 +34,15 @@ def startThreading():
 
         q.task_done()
 
+
 def main():
 
     start_time = time.time()
 
-    if len(sys.argv) == 2:
-        globals()['target'] = socket.gethostbyname(sys.argv[1])
-    else:
-        print("Argument Error")
+    IP_Scanner.printNetworkIPs()
+
+    targetIP = input("What IP do you want to target?\n")
+    globals()['target'] = socket.gethostbyname(targetIP)
 
     print("Scanning Target: " + target)
     print("Scanning Started at:" + str(datetime.now()))
