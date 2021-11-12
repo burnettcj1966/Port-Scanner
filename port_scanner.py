@@ -1,4 +1,3 @@
-
 import sys
 import socket
 from threading import Thread
@@ -7,6 +6,7 @@ import threading
 
 q = Queue()
 target = 0
+ports = []
 
 def scan(port):
     try:
@@ -17,7 +17,7 @@ def scan(port):
         if (port % 10000 == 0): print("BENCHMARK: " + str(port))
         
         if result == 0:
-            print("PORT {} IS OPEN".format(port))
+            ports.append("PORT {} IS OPEN".format(port))
         s.close
 
     except socket.gaierror:
@@ -36,10 +36,11 @@ def startThreading():
         q.task_done()
         
         
-def startScanningTarget(target):
+def startScanningTarget(target, ports):
     globals()['target'] = socket.gethostbyname(target)
     
-    for n in range (10000):
+    globals()['ports'] = ports
+    for n in range (8000):
         t = threading.Thread(target=startThreading)
         t.daemon = True
         t.start()
