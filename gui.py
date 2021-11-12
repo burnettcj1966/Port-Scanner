@@ -29,6 +29,7 @@ def press(button):
         ports = []
         port_scanner.startScanningTarget(str(selectedIP), ports)
         
+        app.addListItem("openports", "IP ADDRESS: " + selectedIP)
         app.addListItems("openports", ports)
         app.deselectAllListItems("openports", callFunction = False)
         
